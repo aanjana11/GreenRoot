@@ -2,23 +2,23 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Button, Text, TextInput, View } from 'react-native';
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      const response = await axios.post('http://192.168.1.79:8000/api/token/', {
+      // API call
+      const response = await axios.post('http://192.168.1.79:8000/api/auth/signup', {
         username: username,
         password: password
       });
+      // Success message
       setMessage(response.data.success);
-
-      // You can save token here for session management
-      // Example: AsyncStorage.setItem('token', response.data.token)
     } catch (error) {
-      setMessage(error.response?.data?.error || 'Something went wrong');
+      // Error message
+      setMessage(error.response.data.error || 'Something went wrong');
     }
   };
 
@@ -37,7 +37,7 @@ export default function LoginScreen() {
         onChangeText={setPassword}
         style={{ borderWidth: 1, marginBottom: 10, padding: 8 }}
       />
-      <Button title="Login" onPress={handleLogin} />
+      <Button title="Register" onPress={handleRegister} />
       {message ? <Text style={{ marginTop: 10 }}>{message}</Text> : null}
     </View>
   );

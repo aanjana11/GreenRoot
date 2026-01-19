@@ -1,90 +1,154 @@
-import { Link } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
+  const router = useRouter();
+
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleLogin = async () => {
+    if (!username || !password) {
+      Alert.alert("Error", "Please enter username and password");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://192.168.1.79:8000/api/token/",
+        { username, password }
+      );
+
+      const { access, refresh } = response.data;
+
+      await AsyncStorage.setItem("accessToken", access);
+      await AsyncStorage.setItem("refreshToken", refresh);
+
+      Alert.alert("Success", "Login successful");
+      router.replace("/homepage");
+    } catch (error: any) {
+      Alert.alert(
+        "Login Failed",
+        error.response?.data?.detail || "Invalid credentials"
+      );
+    }
+  };
+
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#F0FDF4",
-        justifyContent: "center",
-        padding: 24,
-      }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={{ flex: 1, backgroundColor: "#F0FDF4" }}
     >
-      <Text
+      <View
         style={{
-          fontSize: 28,
-          fontWeight: "700",
-          color: "#064E3B",
-          marginBottom: 8,
+          flex: 1,
+          justifyContent: "center",
+          padding: 24,
         }}
       >
-        Welcome Back
-      </Text>
-
-      <Text style={{ color: "#166534", marginBottom: 32 }}>
-        Login to your account
-      </Text>
-
-      <TextInput
-        placeholder="Email"
-        placeholderTextColor="#4D7C0F"
-        value={email}
-        onChangeText={setEmail}
-        style={{
-          borderWidth: 1,
-          borderColor: "#86EFAC",
-          backgroundColor: "#FFFFFF",
-          borderRadius: 12,
-          padding: 14,
-          marginBottom: 16,
-        }}
-      />
-
-      <TextInput
-        placeholder="Password"
-        placeholderTextColor="#4D7C0F"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={{
-          borderWidth: 1,
-          borderColor: "#86EFAC",
-          backgroundColor: "#FFFFFF",
-          borderRadius: 12,
-          padding: 14,
-          marginBottom: 24,
-        }}
-      />
-
-      <TouchableOpacity
-        style={{
-          backgroundColor: "#16A34A",
-          padding: 16,
-          borderRadius: 12,
-          alignItems: "center",
-        }}
-      >
-        <Text style={{ color: "#FFFFFF", fontWeight: "600", fontSize: 16 }}>
-          Login
+        {/* Title */}
+        <Text
+          style={{
+            fontSize: 28,
+            fontWeight: "700",
+            color: "#064E3B",
+            marginBottom: 8,
+            textAlign: "center",
+          }}
+        >
+          Welcome Back 🌱
         </Text>
-      </TouchableOpacity>
 
-      <Link
-        href="/signup"
-        style={{
-          marginTop: 24,
-          textAlign: "center",
-          color: "#166534",
-          fontWeight: "500",
-        }}
-      >
-        Don’t have an account? Signup
-      </Link>
-    </View>
+        <Text
+          style={{
+            color: "#166534",
+            marginBottom: 32,
+            textAlign: "center",
+          }}
+        >
+          Login to continue
+        </Text>
+
+        {/* Username */}
+        <TextInput
+          placeholder="Username"
+          placeholderTextColor="#4D7C0F"
+          value={username}
+          onChangeText={setUsername}
+          autoCapitalize="none"
+          style={{
+            borderWidth: 1,
+            borderColor: "#86EFAC",
+            backgroundColor: "#FFFFFF",
+            borderRadius: 12,
+            padding: 14,
+            marginBottom: 16,
+          }}
+        />
+
+        {/* Password */}
+        <TextInput
+          placeholder="Password"
+          placeholderTextColor="#4D7C0F"
+          value={password}
+          secureTextEntry
+          onChangeText={setPassword}
+          style={{
+            borderWidth: 1,
+            borderColor: "#86EFAC",
+            backgroundColor: "#FFFFFF",
+            borderRadius: 12,
+            padding: 14,
+            marginBottom: 24,
+          }}
+        />
+
+        {/* Login Button */}
+        <TouchableOpacity
+          onPress={handleLogin}
+          activeOpacity={0.8}
+          style={{
+            backgroundColor: "#16A34A",
+            padding: 16,
+            borderRadius: 12,
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{
+              color: "#FFFFFF",
+              fontWeight: "600",
+              fontSize: 16,
+            }}
+          >
+            Login
+          </Text>
+        </TouchableOpacity>
+
+        {/* Signup Link */}
+        <Link
+          href="/signup"
+          style={{
+            marginTop: 24,
+            textAlign: "center",
+            color: "#166534",
+            fontWeight: "500",
+          }}
+        >
+          Don’t have an account? Sign up
+        </Link>
+      </View>
+    </KeyboardAvoidingView>
   );
 }

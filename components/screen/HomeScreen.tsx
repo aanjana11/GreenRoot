@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import CustomButton from "../CustomButton";
 
+
 const HomeScreen = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
