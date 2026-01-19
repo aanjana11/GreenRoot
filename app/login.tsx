@@ -1,54 +1,50 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Link, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
-export default function RegisterScreen() {
+export default function LoginScreen() {
   const router = useRouter();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const token = await AsyncStorage.getItem("accessToken");
-      if (token) {
-        router.replace("/(tabs)");
-      }
-    };
-
-    checkAuth();
-  });
-
-  const handleRegister = async () => {
+  const handleLogin = async () => {
     if (!username || !password) {
-      Alert.alert("Error", "All fields are required");
+      Alert.alert("Error", "Please enter username and password");
       return;
     }
 
     try {
-      await axios.post("http://192.168.1.79:8000/api/auth/signup/", {
+      const response = await axios.post("http://192.168.1.79:8000/api/token/", {
         username,
         password,
       });
 
-      Alert.alert("Success", "Account created successfully");
+      const { access, refresh } = response.data;
 
-      // ✅ Go to login screen
-      router.replace("/login");
+      await AsyncStorage.setItem("accessToken", access);
+      await AsyncStorage.setItem("refreshToken", refresh);
+
+      //   await AsyncStorage.setItem("accessToken", "123sdfg");
+      //   await AsyncStorage.setItem("refreshToken", "123dfgh");
+
+      Alert.alert("Success", "Login successful");
+
+      router.replace("/(tabs)");
     } catch (error: any) {
       Alert.alert(
-        "Signup Failed",
-        error.response?.data?.error || "Something went wrong",
+        "Login Failed",
+        error.response?.data?.detail || "Invalid credentials",
       );
     }
   };
@@ -65,7 +61,6 @@ export default function RegisterScreen() {
           padding: 24,
         }}
       >
-        {/* Title */}
         <Text
           style={{
             fontSize: 28,
@@ -75,7 +70,7 @@ export default function RegisterScreen() {
             textAlign: "center",
           }}
         >
-          Create Account 🌱
+          Welcome Back 🌱
         </Text>
 
         <Text
@@ -85,10 +80,9 @@ export default function RegisterScreen() {
             textAlign: "center",
           }}
         >
-          Signup to get started
+          Login to continue
         </Text>
 
-        {/* Username */}
         <TextInput
           placeholder="Username"
           placeholderTextColor="#4D7C0F"
@@ -105,7 +99,6 @@ export default function RegisterScreen() {
           }}
         />
 
-        {/* Password */}
         <TextInput
           placeholder="Password"
           placeholderTextColor="#4D7C0F"
@@ -122,9 +115,8 @@ export default function RegisterScreen() {
           }}
         />
 
-        {/* Button */}
         <TouchableOpacity
-          onPress={handleRegister}
+          onPress={handleLogin}
           activeOpacity={0.8}
           style={{
             backgroundColor: "#16A34A",
@@ -140,13 +132,12 @@ export default function RegisterScreen() {
               fontSize: 16,
             }}
           >
-            Register
+            Login
           </Text>
         </TouchableOpacity>
 
-        {/* ✅ Login link */}
         <Link
-          href="/login"
+          href="/signup"
           style={{
             marginTop: 24,
             textAlign: "center",
@@ -154,7 +145,7 @@ export default function RegisterScreen() {
             fontWeight: "500",
           }}
         >
-          Already have an account? Login
+          Don’t have an account? Sign up
         </Link>
       </View>
     </KeyboardAvoidingView>

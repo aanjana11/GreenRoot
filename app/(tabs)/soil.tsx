@@ -1,14 +1,13 @@
+import CustomButton from "@/components/CustomButton";
+import CustomInput from "@/components/CustomInput";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import CustomButton from "..//CustomButton";
-import CustomInput from "..//CustomInput";
 
-const SoilScreen = () => {
+export default function SoilScreen() {
   const [ph, setPh] = useState("");
   const [n, setN] = useState("");
   const [p, setP] = useState("");
   const [k, setK] = useState("");
-
   const [result, setResult] = useState("");
 
   const analyzeSoil = () => {
@@ -19,7 +18,6 @@ const SoilScreen = () => {
 
     let recommendation = "";
 
-    // Simple Rule-based logic
     if (phVal < 6.5) recommendation += "Soil acidic. Add lime.\n";
     if (phVal > 7.5) recommendation += "Soil alkaline. Add sulfur.\n";
     if (nVal < 50) recommendation += "Low Nitrogen. Use Urea.\n";
@@ -49,31 +47,30 @@ const SoilScreen = () => {
       )}
     </ScrollView>
   );
-};
-
-export default SoilScreen;
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#F0FDF4",
   },
   title: {
     fontSize: 24,
     fontWeight: "700",
     marginBottom: 20,
+    color: "#064E3B",
   },
   resultBox: {
     marginTop: 20,
     padding: 15,
     borderWidth: 1,
-    borderColor: "#2E8B57",
+    borderColor: "#16A34A",
     borderRadius: 10,
-    backgroundColor: "#f0fff0",
+    backgroundColor: "#ECFDF5",
   },
   resultText: {
-    color: "#2E8B57",
+    color: "#065F46",
     fontSize: 16,
   },
 });
