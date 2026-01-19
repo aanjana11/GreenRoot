@@ -1,33 +1,67 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
+        tabBarActiveTintColor: "#16A34A",
+        tabBarInactiveTintColor: "#9CA3AF",
+        tabBarStyle: {
+          borderTopWidth: 1,
+          borderTopColor: "#D1FAE5",
+          backgroundColor: "#FFFFFF",
+          height: 60,
+          paddingTop: 6,
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="camera"
+        options={{
+          title: "Camera",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="camera" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="soil"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Soil",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="leaf" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="logout"
+        options={{
+          title: "Logout",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="log-out" size={size} color={color} />
+          ),
         }}
       />
     </Tabs>
