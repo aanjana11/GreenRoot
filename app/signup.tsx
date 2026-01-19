@@ -2,9 +2,10 @@ import { Link } from "expo-router";
 import { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
-export default function LoginScreen() {
+export default function SignupScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
     <View
@@ -23,11 +24,11 @@ export default function LoginScreen() {
           marginBottom: 8,
         }}
       >
-        Welcome Back
+        Create Account
       </Text>
 
       <Text style={{ color: "#166534", marginBottom: 32 }}>
-        Login to your account
+        Signup to get started
       </Text>
 
       <TextInput
@@ -57,6 +58,22 @@ export default function LoginScreen() {
           backgroundColor: "#FFFFFF",
           borderRadius: 12,
           padding: 14,
+          marginBottom: 16,
+        }}
+      />
+
+      <TextInput
+        placeholder="Confirm Password"
+        placeholderTextColor="#4D7C0F"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+        style={{
+          borderWidth: 1,
+          borderColor: "#86EFAC",
+          backgroundColor: "#FFFFFF",
+          borderRadius: 12,
+          padding: 14,
           marginBottom: 24,
         }}
       />
@@ -70,12 +87,12 @@ export default function LoginScreen() {
         }}
       >
         <Text style={{ color: "#FFFFFF", fontWeight: "600", fontSize: 16 }}>
-          Login
+          Create Account
         </Text>
       </TouchableOpacity>
 
       <Link
-        href="/signup"
+        href="/"
         style={{
           marginTop: 24,
           textAlign: "center",
@@ -83,7 +100,7 @@ export default function LoginScreen() {
           fontWeight: "500",
         }}
       >
-        Don’t have an account? Signup
+        Already have an account? Login
       </Link>
     </View>
   );
