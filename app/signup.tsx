@@ -1,5 +1,5 @@
+import { api } from "@/api/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -36,7 +36,7 @@ export default function RegisterScreen() {
     }
 
     try {
-      await axios.post("http://192.168.1.79:8000/api/auth/signup/", {
+      await api.post("/api/auth/signup/", {
         username,
         password,
       });

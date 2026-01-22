@@ -1,15 +1,15 @@
+import { api } from "@/api/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 export default function LoginScreen() {
@@ -25,7 +25,7 @@ export default function LoginScreen() {
     }
 
     try {
-      const response = await axios.post("http://192.168.1.79:8000/api/token/", {
+      const response = await api.post("/api/token/", {
         username,
         password,
       });
