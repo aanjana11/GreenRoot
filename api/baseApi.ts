@@ -1,2 +1,2 @@
 export const API_URL =
-  "https://silvicolous-elianna-unintendedly.ngrok-free.dev/";
+  "https://silvicolous-elianna-unintendedly.ngrok-free.dev";
